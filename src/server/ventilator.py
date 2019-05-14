@@ -1,30 +1,25 @@
-from multiprocessing import Process
-import json
 import sys
 from os import path
-import zmq
+sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
 
 from src.socket.zmq_socket import ZMQSocketPushBind, ZMQSocketRep
 
 
 class Ventilator:
 
-    def __init__(self, config_file):
+    def __init__(self, listen_port, push_port):
         super().__init__()
-        with open(config_file, 'r+') as c_file:
-            config_info_post = json.load(c_file)
-            c_file.close()
+
+        self.req_sock = ZMQSocketRep('*', listen_port)
 
         #
-        self.req_sock = ZMQSocketRep('*', config_info_post['listen_port'])
-
-        #
-        self.push_sock = ZMQSocketPushBind('127.0.0.1', config_info_post['push_port'])
+        self.push_sock = ZMQSocketPushBind('127.0.0.1', push_port)
 
         self.end = False
 
     def run(self):
         # get client addres from coordinator
+        print('Ventilator - Started')
 
         counter = 0
         counter_inbound = 0
@@ -60,6 +55,6 @@ class Ventilator:
             self.push_sock.send_json(tweet)
 
         print(str(counter_inbound))
-        print('Finished')
+        print('Ventilator - Finished')
 
 

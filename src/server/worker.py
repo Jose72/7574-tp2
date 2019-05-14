@@ -1,8 +1,8 @@
-from multiprocessing import Process
-import json
 import sys
-from time import sleep
 from os import path
+sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
+
+from time import sleep
 from src.filter.analyzer import TweetAnalyzer
 from src.socket.zmq_socket import ZMQSocketPushCon, ZMQSocketPullCon
 
@@ -22,16 +22,20 @@ class Worker:
 
     def run(self):
         # get client addres from coordinator
+        print('Worker - Started')
 
-        analayzer = TweetAnalyzer()
+        analyzer = TweetAnalyzer()
         counter = 0
 
         while not self.end:
             tweet = self.pull_sock.recv_json()
 
             # TO DO: save tweet in case of failure
-            sleep(0.5)
-            score = analayzer.analyze(tweet['text'])
+
+            # simulate some processing to se it running slower
+            sleep(0.25)
+
+            score = analyzer.analyze(tweet['text'])
             print(score)
             counter += 1
 
@@ -42,7 +46,7 @@ class Worker:
             print('worker: ' + str(tweet))
             print(str(counter))
             # send to sink
-            #self.push_sock.send_json(tweet)
+            self.push_sock.send_json(tweet)
 
         print(str(counter))
-        print('Finished')
+        print('Worker - Finished')

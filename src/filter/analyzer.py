@@ -1,4 +1,7 @@
-import nltk
+import sys
+from os import path
+sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
+
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 
