@@ -1,0 +1,31 @@
+version: '3'
+services:
+
+  dispatcher:
+    build:
+      context: ./
+      dockerfile: Dockerfile.dispatcher
+    restart: on-failure
+    environment:
+        - PYTHONUNBUFFERED=1
+
+  filter_inbound:
+    build:
+      context: ./
+      dockerfile: Dockerfile.filter_inbound
+    restart: on-failure
+    depends_on:
+      - dispatcher
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  filter_columns:
+    build:
+      context: ./
+      dockerfile: Dockerfile.filter_columns
+    restart: on-failure
+    depends_on:
+      - dispatcher
+    environment:
+      - PYTHONUNBUFFERED=1
+

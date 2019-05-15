@@ -1,0 +1,8 @@
+FROM rabbitmq-python-base:0.0.1
+
+WORKDIR /7574-tp2
+
+COPY . /7574-tp2
+
+CMD sh /7574-tp2/wait_sh
+CMD python3 /7574-tp2/dispatcher_main.py dispatcher.json

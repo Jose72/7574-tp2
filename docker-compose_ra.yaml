@@ -1,0 +1,13 @@
+version: '3'
+services:
+  rabbitmq:
+    build:
+      context: ./
+      dockerfile: Dockerfile.rabbitmq
+    ports:
+      - 15672:15672
+    healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:15672"]
+        interval: 10s
+        timeout: 5s
+        retries: 10

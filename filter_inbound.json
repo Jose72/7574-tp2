@@ -1,0 +1,10 @@
+{
+  "host_name" : "rabbitmq",
+  "in_q_name" : "full_tweets",
+  "in_r_key" : "full_tweets",
+  "out_q_name" : "inbound_tweets",
+  "out_r_key" : "inbound_tweets",
+  "fields" : ["inbound"],
+  "conditions" : [true],
+  "remove" : true
+}
