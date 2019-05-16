@@ -3,7 +3,7 @@
   "in_q_name" : "inbound_tweets",
   "in_r_key" : "inbound_tweets",
   "out_q_name" : "pre_analyze_tweets",
-  "out_r_key" : "pre_analyze_tweet",
+  "out_r_key" : "pre_analyze_tweets",
   "fields" : ["tweet_id","response_tweet_id","in_response_to_tweet_id"],
   "conditions" : [],
   "remove" : true

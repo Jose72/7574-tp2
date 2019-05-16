@@ -29,3 +29,13 @@ services:
     environment:
       - PYTHONUNBUFFERED=1
 
+  text_processing:
+    build:
+      context: ./
+      dockerfile: Dockerfile.text_processing
+    restart: on-failure
+    depends_on:
+      - filter_columns
+    environment:
+      - PYTHONUNBUFFERED=1
+

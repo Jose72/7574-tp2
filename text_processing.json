@@ -1,0 +1,10 @@
+{
+  "host_name" : "rabbitmq",
+  "in_q_name" : "pre_analyze_tweets",
+  "in_r_key" : "pre_analyze_tweets",
+  "out_q_name" : "post_analyze_tweets",
+  "out_r_key" : "post_analyze_tweets",
+  "field" : "text",
+  "new_field" : "score",
+  "remove" : true
+}
