@@ -1,9 +1,12 @@
 {
-  "host_name" : "rabbitmq",
+  "host_name_in" : "rabbitmq",
   "in_q_name" : "pre_analyze_tweets",
   "in_r_key" : "pre_analyze_tweets",
-  "out_q_name" : "post_analyze_tweets",
-  "out_r_key" : "post_analyze_tweets",
+  "host_name_out" : "rabbitmq",
+  "out_q_name_a1" : "post_analyze_tweets_a1",
+  "out_r_key_a1" : "post_analyze_tweets_a1",
+  "out_q_name_a2" : "post_analyze_tweets_a2",
+  "out_r_key_a2" : "post_analyze_tweets_a2",
   "field" : "text",
   "new_field" : "score",
   "remove" : true

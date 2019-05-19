@@ -1,0 +1,10 @@
+{
+  "host_name_in" : "rabbitmq",
+  "in_q_name" : "post_analyze_tweets_a1",
+  "in_r_key" : "pos_analyze_tweets_a1",
+  "host_name_out" : "rabbitmq",
+  "out_q_name" : "negative_users",
+  "out_r_key" : "negative_users",
+  "user_field" : "author_id",
+  "aggregate_field" : "score"
+}

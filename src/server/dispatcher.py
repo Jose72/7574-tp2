@@ -17,6 +17,6 @@ class Dispatcher:
                                     fieldnames=fieldnames)
             for e in reader:
                 #print(json.dumps(e))
-                pipe.send(json.dumps(e))
+                pipe.send(e)
 
             f.close()

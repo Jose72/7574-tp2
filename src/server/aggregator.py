@@ -1,22 +1,35 @@
+from src.data.records import UsersTweetRecords
 
 
-class Aggregator:
+class UserAggregator:
 
-    def __init__(self, field, validator):
+    def __init__(self, u_field, aggregate_field, validator):
 
-        self.field = field
+        self.user_field = u_field
+        self.aggregate_field = aggregate_field
         self.condition_validator = validator
-        self.counter = []
+        self.user_tweet_records = UsersTweetRecords()
 
-    def aggregate(self, msg):
+    def process(self, msg):
         ok_to_aggregate = True
         if self.condition_validator:
-            ok_to_aggregate = self.condition_validator.validate(msg[self.field])
+            ok_to_aggregate = self.condition_validator.validate(msg[self.aggregate_field])
 
         if ok_to_aggregate:
-            for c in self.counter:
-                if c[0] == msg[self.field]:
-                    c[1] += 1
+            self.user_tweet_records.increment(msg[self.user_field])
 
+    def create_messages(self):
+        msgs = []
+        while not self.user_tweet_records.empty():
+            msgs.append(self.user_tweet_records.take())
+        return msgs
 
+class NegativeTweetValidator:
 
+    @staticmethod
+    def validate(score):
+        result = False
+        if int(score) < -0.5:
+            result = True
+        #print(str(score) + str(result))
+        return result

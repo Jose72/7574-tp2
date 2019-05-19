@@ -1,84 +1,60 @@
 from collections import Counter
 
 
-class TweetCounter:
-    def __init__(self, date, value):
-        self.date = date
-        self.counter = value
+class UserTweetCounter:
+    def __init__(self, user):
+        self. user = user
+        self.counter = 0
 
     def increment(self, n):
         self.counter += n
+        self.print()
 
-    def same_date(self, date):
-        return self.date == date
+    def same_user(self, user):
+        return self.user == user
+
+    def get_user(self):
+        return self.user
 
     def get_counter(self):
         return self.counter
 
     def print(self):
-        print('date: {} - counter {}'.format(self.date, self.counter))
-
-
-class UserTweetRecord:
-
-    def __init__(self, u_id, negative_t_limit):
-        self.user_id = u_id
-        self.negative_tweets_limit = negative_t_limit
-        self.negative_tweets_record = []
-
-    def increment_negative_tweet(self, date):
-        r = False
-        found = False
-        # search for the date
-        for t in self.negative_tweets_record:
-            if t.same_date(date):
-                # increment and set found to True
-                t.increment(1)
-                found = True
-                if t.get_counter() == self.negative_tweets_limit:
-                    r = True
-                break
-
-        if not found:
-            t = TweetCounter(date, 1)
-            self.negative_tweets_record.append(t)
-        return r
-
-    def same_id(self, u_id):
-        return self.user_id == u_id
-
-    def print(self):
-        print('user: {}'.format(self.user_id))
-        for nr in self.negative_tweets_record:
-            nr.print()
+        print('user: {} - counter {}'.format(self.user, self.counter))
 
 
 class UsersTweetRecords:
 
-    def __init__(self, negative_t_limit):
-        self.negative_tweets_limit = negative_t_limit
+    def __init__(self):
         self.users_tweet_recs = []
 
-    def increment_negative_tweet(self, u_id, date):
-        r = False
+    def increment(self, user):
         found = False
         # search for the date
         for ur in self.users_tweet_recs:
-            if ur.same_id(u_id):
+            if ur.same_user(user):
                 # increment and set found to True
-                r = ur.increment_negative_tweet(date)
+                ur.increment(1)
                 found = True
                 break
 
         if not found:
-            ur = UserTweetRecord(u_id, self.negative_tweets_limit)
-            ur.increment_negative_tweet(date)
+            ur = UserTweetCounter(user)
+            ur.increment(1)
             self.users_tweet_recs.append(ur)
-        return r
+        return None
 
     def print(self):
         for ur in self.users_tweet_recs:
             ur.print()
+
+    def take(self):
+        if len(self.users_tweet_recs) > 0:
+            return self.users_tweet_recs.pop()
+        return None
+
+    def empty(self):
+        return len(self.users_tweet_recs)
 
 
 class TotalTweetRecord:

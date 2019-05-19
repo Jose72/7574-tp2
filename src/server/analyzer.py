@@ -38,3 +38,21 @@ class TextProcessor:
             del msg[self.field]
         print(msg)
         return msg
+
+
+class EndMessageValidator:
+
+    def __init__(self):
+        pass
+
+    @staticmethod
+    def validate(msg):
+        res = False
+        if str(msg) == 'end':
+            res = True
+        return res
+
+    @staticmethod
+    def create_end_msg():
+        return 'end'
+

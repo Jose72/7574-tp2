@@ -39,3 +39,13 @@ services:
     environment:
       - PYTHONUNBUFFERED=1
 
+  aggregator_users:
+    build:
+      context: ./
+      dockerfile: Dockerfile.aggregator_users
+    restart: on-failure
+    depends_on:
+      - text_processing
+    environment:
+      - PYTHONUNBUFFERED=1
+
