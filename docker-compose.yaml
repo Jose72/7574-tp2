@@ -1,51 +1,38 @@
 version: '3'
 services:
-
   dispatcher:
     build:
       context: ./
       dockerfile: Dockerfile.dispatcher
-    restart: on-failure
     environment:
         - PYTHONUNBUFFERED=1
-
-  filter_inbound:
+  filter_inbound_1:
     build:
       context: ./
       dockerfile: Dockerfile.filter_inbound
-    restart: on-failure
-    depends_on:
-      - dispatcher
     environment:
       - PYTHONUNBUFFERED=1
-
-  filter_columns:
+  filter_columns_1:
     build:
       context: ./
       dockerfile: Dockerfile.filter_columns
-    restart: on-failure
-    depends_on:
-      - filter_inbound
     environment:
       - PYTHONUNBUFFERED=1
-
-  text_processing:
+  text_processing_1:
     build:
       context: ./
       dockerfile: Dockerfile.text_processing
-    restart: on-failure
-    depends_on:
-      - filter_columns
     environment:
       - PYTHONUNBUFFERED=1
-
   aggregator_users:
     build:
       context: ./
       dockerfile: Dockerfile.aggregator_users
-    restart: on-failure
-    depends_on:
-      - text_processing
     environment:
       - PYTHONUNBUFFERED=1
-
+  aggregator_total:
+    build:
+      context: ./
+      dockerfile: Dockerfile.aggregator_total
+    environment:
+      - PYTHONUNBUFFERED=1

@@ -57,18 +57,74 @@ class UsersTweetRecords:
         return len(self.users_tweet_recs)
 
 
-class TotalTweetRecord:
+class DayTweetCounter:
 
-    def __init__(self):
+    def __init__(self, date):
+        self.date = date
         self.positive_tweets = 0
         self.negative_tweets = 0
 
-    def increment_negative_tweet(self):
-        self.negative_tweets += 1
+    def increment_negative(self, n):
+        self.negative_tweets += n
+        self.print()
 
-    def increment_positive_tweet(self):
-        self.positive_tweets += 1
+    def increment_positive(self, n):
+        self.positive_tweets += n
+        self.print()
+
+    def same_date(self, date):
+        return self.date == date
 
     def print(self):
-        print('total negatives: {} - total positives: {}'.format(self.positive_tweets, self.negative_tweets))
+        print('day: {} - total negatives: {} - total positives: {}'.format(self.date, self.positive_tweets, self.negative_tweets))
 
+
+class DayTweetRecords:
+
+    def __init__(self):
+        self.day_tweet_recs = []
+
+    # TODO: remove duplicate code
+    def increment_positive(self, date):
+        found = False
+        # search for the date
+        for dr in self.day_tweet_recs:
+            if dr.same_date(date):
+                # increment and set found to True
+                dr.increment_positive(1)
+                found = True
+                break
+
+        if not found:
+            dr = DayTweetCounter(date)
+            dr.increment_positive(1)
+            self.day_tweet_recs.append(dr)
+        return None
+
+    def increment_negative(self, date):
+        found = False
+        # search for the date
+        for dr in self.day_tweet_recs:
+            if dr.same_date(date):
+                # increment and set found to True
+                dr.increment_negative(1)
+                found = True
+                break
+
+        if not found:
+            dr = DayTweetCounter(date)
+            dr.increment_negative(1)
+            self.day_tweet_recs.append(dr)
+        return None
+
+    def print(self):
+        for ur in self.day_tweet_recs:
+            ur.print()
+
+    def take(self):
+        if len(self.day_tweet_recs) > 0:
+            return self.day_tweet_recs.pop()
+        return None
+
+    def empty(self):
+        return len(self.day_tweet_recs)

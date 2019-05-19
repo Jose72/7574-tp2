@@ -15,6 +15,9 @@ class Dispatcher:
                                     quotechar='"',
                                     quoting=csv.QUOTE_MINIMAL,
                                     fieldnames=fieldnames)
+
+            header = next(reader)
+
             for e in reader:
                 #print(json.dumps(e))
                 pipe.send(e)
