@@ -1,4 +1,5 @@
 import json
+import uuid
 from multiprocessing import Queue
 from time import sleep
 import sys
@@ -15,21 +16,23 @@ from src.server.aggregator import UserAggregator, NegativeTweetValidator
 def main():
     print("AGGREGATOR USERS STARTED")
 
+    consumer_tag = uuid.uuid1().hex
+
     with open(sys.argv[1], 'r+') as c_file:
         config_info = json.load(c_file)
         c_file.close()
 
-        in_pipe = Pipe(config_info['host_name_in'], config_info['in_q_name'], config_info['in_r_key'])
+        in_pipe = Pipe(config_info['host_name_in'], config_info['in_q_name'], config_info['in_r_key'], consumer_tag)
         out_pipe = Pipe(config_info['host_name_out'], config_info['out_q_name'], config_info['out_r_key'])
         aggregator = UserAggregator(config_info['user_field'], config_info['aggregate_field'], NegativeTweetValidator)
 
-        end_msg_validator = EndMessageValidator
-        msg_queue = Queue()
-        receiver = Receiver(in_pipe, None, aggregator, end_msg_validator)
+        receiver = Receiver(in_pipe, [], aggregator)
 
         receiver.start()
 
         receiver.join()
+
+        aggregator.print()
 
         out_pipe.close()
 

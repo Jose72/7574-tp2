@@ -18,11 +18,14 @@ class UserAggregator:
         if ok_to_aggregate:
             self.user_tweet_records.increment(msg[self.user_field])
 
-    def create_messages(self):
+    def create_msgs(self):
         msgs = []
         while not self.user_tweet_records.empty():
             msgs.append(self.user_tweet_records.take())
         return msgs
+
+    def print(self):
+        self.user_tweet_records.print()
 
 
 class TotalAggregator:
@@ -45,6 +48,9 @@ class TotalAggregator:
             if self.n_validator.validate(score):
                 self.day_tweet_records.increment_negative(date)
         return None
+
+    def print(self):
+        self.day_tweet_records.print()
 
 
 class NegativeTweetValidator:

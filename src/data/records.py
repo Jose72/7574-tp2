@@ -8,7 +8,7 @@ class UserTweetCounter:
 
     def increment(self, n):
         self.counter += n
-        self.print()
+       #self.print()
 
     def same_user(self, user):
         return self.user == user
@@ -66,11 +66,11 @@ class DayTweetCounter:
 
     def increment_negative(self, n):
         self.negative_tweets += n
-        self.print()
+        #self.print()
 
     def increment_positive(self, n):
         self.positive_tweets += n
-        self.print()
+        #self.print()
 
     def same_date(self, date):
         return self.date == date
@@ -118,8 +118,8 @@ class DayTweetRecords:
         return None
 
     def print(self):
-        for ur in self.day_tweet_recs:
-            ur.print()
+        for dr in self.day_tweet_recs:
+            dr.print()
 
     def take(self):
         if len(self.day_tweet_recs) > 0:
