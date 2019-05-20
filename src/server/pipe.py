@@ -36,16 +36,6 @@ class Pipe:
                 for mq in msg_queues:
                     mq.put(b)
 
-                q_dec = ch.queue_declare(q_name, durable=True, passive=True)
-                cc = q_dec.method.consumer_count
-                #print("consumers: {}".format(cc))
-                if not (cc == 1):
-                    ch.basic_publish(exchange='',
-                                     routing_key=self.routing_key,
-                                     body=json.dumps('end'),
-                                     properties=pika.BasicProperties(delivery_mode=2)
-                                     )
-
                 ch.basic_cancel(c_tag)
                 return
 
@@ -68,9 +58,18 @@ class Pipe:
         self.connection.close()
 
     def send_end_signal(self):
-        self.send('end')
+        cc = self.get_consumer_count()
+        for i in range(0, cc):
+            self.send('end')
+
+    def wait_no_consumers(self, secs=0.5):
+        cc = self.get_consumer_count()
+        while not (cc == 0):
+            sleep(secs)
+            cc = self.get_consumer_count()
+        self.channel.queue_purge(self.q_name)
 
     def get_consumer_count(self):
         q_declare_ok = self.channel.queue_declare(self.q_name, durable=True, passive=True)
-        return q_declare_ok.consumer_count()
+        return q_declare_ok.method.consumer_count
 

@@ -58,9 +58,14 @@ def main():
     n_filter_inbound = int(sys.argv[1])
     n_filter_columns = int(sys.argv[2])
     n_text_processor = int(sys.argv[3])
-    with open("./docker-compose.yaml", 'w+') as f:
+    with open("./docker-compose_dispatcher.yaml", 'w+') as f:
         f.write(HEADER)
         f.write(DISPATCHER)
+        f.close()
+
+    with open("./docker-compose.yaml", 'w+') as f:
+        f.write(HEADER)
+        #f.write(DISPATCHER)
         for i in range(0, n_filter_inbound):
             f.write(FILTER_INBOUND.format(i+1))
         for i in range(0, n_filter_columns):

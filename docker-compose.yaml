@@ -1,12 +1,12 @@
 version: '3'
 services:
-  dispatcher:
+  filter_inbound_1:
     build:
       context: ./
-      dockerfile: Dockerfile.dispatcher
+      dockerfile: Dockerfile.filter_inbound
     environment:
-        - PYTHONUNBUFFERED=1
-  filter_inbound_1:
+      - PYTHONUNBUFFERED=1
+  filter_inbound_2:
     build:
       context: ./
       dockerfile: Dockerfile.filter_inbound
@@ -18,7 +18,19 @@ services:
       dockerfile: Dockerfile.filter_columns
     environment:
       - PYTHONUNBUFFERED=1
+  filter_columns_2:
+    build:
+      context: ./
+      dockerfile: Dockerfile.filter_columns
+    environment:
+      - PYTHONUNBUFFERED=1
   text_processing_1:
+    build:
+      context: ./
+      dockerfile: Dockerfile.text_processing
+    environment:
+      - PYTHONUNBUFFERED=1
+  text_processing_2:
     build:
       context: ./
       dockerfile: Dockerfile.text_processing

@@ -1,0 +1,8 @@
+version: '3'
+services:
+  dispatcher:
+    build:
+      context: ./
+      dockerfile: Dockerfile.dispatcher
+    environment:
+        - PYTHONUNBUFFERED=1

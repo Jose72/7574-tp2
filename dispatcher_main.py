@@ -1,5 +1,6 @@
 import sys
 import json
+from time import sleep
 
 from src.server.dispatcher import Dispatcher
 from src.server.pipe import Pipe
@@ -15,6 +16,7 @@ def main():
         #SEND END SIGNAL
         #consumer_count = out_pipe.get_consumer_count()
         out_pipe.send_end_signal()
+        out_pipe.wait_no_consumers()
 
     print("DISPATCHER FINISHED")
 

@@ -21,6 +21,7 @@ class Sender(Thread):
                 self.out_pipe.send(msg)
 
             self.out_pipe.send_end_signal()
+            self.out_pipe.wait_no_consumers()
 
         except pika.exceptions.ConnectionClosedByBroker:
             pass
