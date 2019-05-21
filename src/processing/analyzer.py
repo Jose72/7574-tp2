@@ -11,7 +11,7 @@ class TextAnalyzer:
         self.sentiment_analyzer = SentimentIntensityAnalyzer()
 
     # return 1 if its a positive tweet
-    # 0 if no
+    # -1 if negative, 0 otherwise
     def analyze(self, text):
         score = self.sentiment_analyzer.polarity_scores(text)['compound']
         r = 0
@@ -36,23 +36,7 @@ class TextProcessor:
         msg.update({self.new_field: score})
         if self.remove:
             del msg[self.field]
-        print(msg)
+        # print(msg)
         return msg
 
-
-class EndMessageValidator:
-
-    def __init__(self):
-        pass
-
-    @staticmethod
-    def validate(msg):
-        res = False
-        if str(msg) == 'end':
-            res = True
-        return res
-
-    @staticmethod
-    def create_end_msg():
-        return 'end'
 

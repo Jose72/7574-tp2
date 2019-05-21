@@ -1,16 +1,11 @@
 import json
 import uuid
-from multiprocessing import Queue
-from time import sleep
 import sys
-from os import path
 #sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
 
-from src.server.pipe import Pipe
+from src.middleware.pipe import Pipe
 from src.server.receiver import Receiver
-from src.server.sender import Sender
-from src.server.analyzer import EndMessageValidator
-from src.server.aggregator import UserAggregator, NegativeTweetValidator
+from src.processing.aggregator import UserAggregator, NegativeTweetValidator
 
 
 def main():
@@ -33,6 +28,8 @@ def main():
         receiver.join()
 
         aggregator.print()
+
+        aggregator.save_to_file()
 
         out_pipe.close()
 

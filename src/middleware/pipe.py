@@ -22,6 +22,9 @@ class Pipe:
                                    properties=pika.BasicProperties(delivery_mode=2)
                                    )
 
+    # receives incoming msg from rabbit queue
+    # process them using a processor object
+    # and puts them into the queues
     def receive_and_process(self, processor, msg_queues):
 
         q_name = self.q_name
@@ -32,6 +35,7 @@ class Pipe:
 
             ch.basic_ack(delivery_tag=method.delivery_tag)
 
+            # check for end msg, if so close
             if b == 'end':
                 for mq in msg_queues:
                     mq.put(b)
@@ -39,11 +43,13 @@ class Pipe:
                 ch.basic_cancel(c_tag)
                 return
 
+            # process the msg
             if processor:
                 result = processor.process(b)
             else:
                 result = b
 
+            # put processed msg into queue
             if result is not None:
                 for mq in msg_queues:
                     mq.put(result)

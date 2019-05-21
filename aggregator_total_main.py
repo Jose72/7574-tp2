@@ -1,15 +1,11 @@
 import json
-from multiprocessing import Queue
-from time import sleep
 import sys
 import uuid
-from os import path
 #sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
 
-from src.server.pipe import Pipe
+from src.middleware.pipe import Pipe
 from src.server.receiver import Receiver
-from src.server.sender import Sender
-from src.server.aggregator import TotalAggregator, NegativeTweetValidator, PositiveTweetValidator
+from src.processing.aggregator import TotalAggregator, NegativeTweetValidator, PositiveTweetValidator
 
 
 def main():
@@ -32,6 +28,10 @@ def main():
         receiver.join()
 
         aggregator.print()
+
+        aggregator.save_to_file()
+
+        in_pipe.close()
 
     print("AGGREGATOR TOTAL FINISHED")
 

@@ -4,47 +4,63 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile.filter_inbound
+    volumes:
+        - ./:/7574-tp2
     environment:
       - PYTHONUNBUFFERED=1
   filter_inbound_2:
     build:
       context: ./
       dockerfile: Dockerfile.filter_inbound
+    volumes:
+        - ./:/7574-tp2
     environment:
       - PYTHONUNBUFFERED=1
   filter_columns_1:
     build:
       context: ./
       dockerfile: Dockerfile.filter_columns
+    volumes:
+        - ./:/7574-tp2
     environment:
       - PYTHONUNBUFFERED=1
   filter_columns_2:
     build:
       context: ./
       dockerfile: Dockerfile.filter_columns
+    volumes:
+        - ./:/7574-tp2
     environment:
       - PYTHONUNBUFFERED=1
   text_processing_1:
     build:
       context: ./
       dockerfile: Dockerfile.text_processing
+    volumes:
+        - ./:/7574-tp2
     environment:
       - PYTHONUNBUFFERED=1
   text_processing_2:
     build:
       context: ./
       dockerfile: Dockerfile.text_processing
+    volumes:
+        - ./:/7574-tp2
     environment:
       - PYTHONUNBUFFERED=1
   aggregator_users:
     build:
       context: ./
       dockerfile: Dockerfile.aggregator_users
+    volumes:
+        - ./:/7574-tp2
     environment:
       - PYTHONUNBUFFERED=1
   aggregator_total:
     build:
       context: ./
       dockerfile: Dockerfile.aggregator_total
+    volumes:
+        - ./:/7574-tp2
     environment:
       - PYTHONUNBUFFERED=1

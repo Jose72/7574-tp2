@@ -2,6 +2,6 @@ FROM rabbitmq-python-base:0.0.1
 
 WORKDIR /7574-tp2
 
-COPY . /7574-tp2
+#COPY . /7574-tp2
 
 CMD python3 /7574-tp2/filter_main.py filter_columns.json

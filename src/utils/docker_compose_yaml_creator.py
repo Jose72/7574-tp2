@@ -5,6 +5,8 @@ DISPATCHER = "\
     build:\n\
       context: ./\n\
       dockerfile: Dockerfile.dispatcher\n\
+    volumes:\n\
+        - ./:/7574-tp2\n\
     environment:\n\
         - PYTHONUNBUFFERED=1\n"
 
@@ -13,6 +15,8 @@ FILTER_INBOUND = "\
     build:\n\
       context: ./\n\
       dockerfile: Dockerfile.filter_inbound\n\
+    volumes:\n\
+        - ./:/7574-tp2\n\
     environment:\n\
       - PYTHONUNBUFFERED=1\n"
 
@@ -21,6 +25,8 @@ FILTER_COLUMNS = "\
     build:\n\
       context: ./\n\
       dockerfile: Dockerfile.filter_columns\n\
+    volumes:\n\
+        - ./:/7574-tp2\n\
     environment:\n\
       - PYTHONUNBUFFERED=1\n"
 
@@ -29,6 +35,8 @@ TEXT_PROCESSING = "\
     build:\n\
       context: ./\n\
       dockerfile: Dockerfile.text_processing\n\
+    volumes:\n\
+        - ./:/7574-tp2\n\
     environment:\n\
       - PYTHONUNBUFFERED=1\n"
 
@@ -37,6 +45,8 @@ AGGREGATOR_USERS = "\
     build:\n\
       context: ./\n\
       dockerfile: Dockerfile.aggregator_users\n\
+    volumes:\n\
+        - ./:/7574-tp2\n\
     environment:\n\
       - PYTHONUNBUFFERED=1\n"
 
@@ -45,6 +55,8 @@ AGGREGATOR_TOTAL = "\
     build:\n\
       context: ./\n\
       dockerfile: Dockerfile.aggregator_total\n\
+    volumes:\n\
+        - ./:/7574-tp2\n\
     environment:\n\
       - PYTHONUNBUFFERED=1\n"
 

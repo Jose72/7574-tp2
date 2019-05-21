@@ -4,5 +4,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile.dispatcher
+    volumes:
+        - ./:/7574-tp2
     environment:
         - PYTHONUNBUFFERED=1

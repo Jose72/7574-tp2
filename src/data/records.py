@@ -1,14 +1,14 @@
-from collections import Counter
+
+import csv
 
 
 class UserTweetCounter:
     def __init__(self, user):
-        self. user = user
+        self.user = user
         self.counter = 0
 
     def increment(self, n):
         self.counter += n
-       #self.print()
 
     def same_user(self, user):
         return self.user == user
@@ -19,8 +19,17 @@ class UserTweetCounter:
     def get_counter(self):
         return self.counter
 
+    def __str__(self):
+        return 'user: {} - counter {}'.format(self.user, self.counter)
+
     def print(self):
-        print('user: {} - counter {}'.format(self.user, self.counter))
+        print(str(self))
+
+    def report(self):
+        result = False
+        if self.counter > 3:
+            result = True
+        return result
 
 
 class UsersTweetRecords:
@@ -56,6 +65,13 @@ class UsersTweetRecords:
     def empty(self):
         return len(self.users_tweet_recs)
 
+    def save_to_file(self):
+        with open("negative_users_report.txt", 'w+') as f:
+            for utr in self.users_tweet_recs:
+                if utr.report():
+                    f.write(str(utr.get_user()))
+            f.close()
+
 
 class DayTweetCounter:
 
@@ -64,19 +80,25 @@ class DayTweetCounter:
         self.positive_tweets = 0
         self.negative_tweets = 0
 
+    def get_dict(self):
+        return {'day': self.date, 'positive_tweets': self.positive_tweets, 'negative_tweets:': self.negative_tweets}
+
     def increment_negative(self, n):
         self.negative_tweets += n
-        #self.print()
 
     def increment_positive(self, n):
         self.positive_tweets += n
-        #self.print()
 
     def same_date(self, date):
         return self.date == date
 
+    def __str__(self):
+        return 'day: {} - total negatives: {} - total positives: {}'.format(self.date,
+                                                                            self.positive_tweets,
+                                                                            self.negative_tweets)
+
     def print(self):
-        print('day: {} - total negatives: {} - total positives: {}'.format(self.date, self.positive_tweets, self.negative_tweets))
+        print(str(self))
 
 
 class DayTweetRecords:
@@ -128,3 +150,11 @@ class DayTweetRecords:
 
     def empty(self):
         return len(self.day_tweet_recs)
+
+    def save_to_file(self):
+        with open("daily_tweets_report.csv", 'w+') as f:
+            writer = csv.DictWriter(f, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL,
+                                    fieldnames=['day', 'positive_tweets', 'negative_tweets'])
+            for dtr in self.day_tweet_recs:
+                f.write(dtr.get_dict())
+            f.close()

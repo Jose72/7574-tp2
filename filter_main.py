@@ -1,15 +1,13 @@
 import json
 import uuid
 import sys
-from os import path
 from multiprocessing import Queue
 #sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
 
-from src.server.pipe import Pipe
-from src.server.filter import Filter
+from src.middleware.pipe import Pipe
+from src.processing.filter import Filter
 from src.server.receiver import Receiver
 from src.server.sender import Sender
-from src.server.analyzer import EndMessageValidator
 
 
 def main():
