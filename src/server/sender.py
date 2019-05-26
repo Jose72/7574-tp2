@@ -21,7 +21,7 @@ class Sender(Thread):
                     continue
                 self.out_pipe.send(msg)
 
-            sleep(5)
+            #sleep(5)
             self.out_pipe.send_end_signal()
             self.out_pipe.wait_no_consumers()
 

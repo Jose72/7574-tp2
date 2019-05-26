@@ -1,4 +1,5 @@
 import csv
+import json
 from time import sleep
 
 class Dispatcher:
@@ -19,7 +20,7 @@ class Dispatcher:
             counter = 0
 
             for e in reader:
-                #print(json.dumps(e))
+                print(json.dumps(e))
                 pipe.send(e)
                 counter += 1
                 if counter == 100:

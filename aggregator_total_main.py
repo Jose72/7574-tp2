@@ -18,7 +18,8 @@ def main():
         config_info = json.load(c_file)
         c_file.close()
 
-        in_pipe = Pipe(config_info['host_name_in'], config_info['in_q_name'], config_info['in_r_key'], consumer_tag)
+        in_pipe = Pipe(config_info['host_name_in'], config_info['in_q_name'], config_info['in_r_key'],
+                       sys.argv[2], consumer_tag)
         aggregator = TotalAggregator(config_info['date_field'], config_info['aggregate_field'],
                                      PositiveTweetValidator, NegativeTweetValidator)
 

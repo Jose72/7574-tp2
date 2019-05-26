@@ -2,7 +2,7 @@ version: '3'
 services:
   dispatcher:
     build: .
-    command: python3 dispatcher_main.py ./config/dispatcher.json
+    command: python3 dispatcher_main.py ./config/dispatcher.json 2
     image: 7574-tp2-dispatcher
     volumes:
         - ./config:/TP2/config

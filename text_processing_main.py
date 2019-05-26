@@ -19,9 +19,12 @@ def main():
         config_info = json.load(c_file)
         c_file.close()
 
-        in_pipe = Pipe(config_info['host_name_in'], config_info['in_q_name'], config_info['in_r_key'], consumer_tag)
-        out_pipe_a1 = Pipe(config_info['host_name_out'], config_info['out_q_name_a1'], config_info['out_r_key_a1'])
-        out_pipe_a2 = Pipe(config_info['host_name_out'], config_info['out_q_name_a2'], config_info['out_r_key_a2'])
+        in_pipe = Pipe(config_info['host_name_in'], config_info['in_q_name'], config_info['in_r_key'],
+                       sys.argv[2], consumer_tag)
+        out_pipe_a1 = Pipe(config_info['host_name_out'], config_info['out_q_name_a1'],
+                           config_info['out_r_key_a1'], sys.argv[3])
+        out_pipe_a2 = Pipe(config_info['host_name_out'], config_info['out_q_name_a2'],
+                           config_info['out_r_key_a2'], sys.argv[4])
         t_processor = TextProcessor(config_info['field'], config_info['new_field'], config_info['remove'])
 
         msg_queue_1 = Queue()

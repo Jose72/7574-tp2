@@ -1,11 +1,15 @@
 import pika
 import json
 from time import sleep
+import sys
+from os import path
+sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
 
+from src.utils.counter import Counter
 
 class Pipe:
 
-    def __init__(self, host_name, q_name, r_key, consumer_tag=None):
+    def __init__(self, host_name, q_name, r_key, connected, consumer_tag=None):
         self.connection = pika.BlockingConnection(
             pika.ConnectionParameters(host=host_name))
         self.channel = self.connection.channel()
@@ -14,6 +18,7 @@ class Pipe:
         self.routing_key = r_key
         self.channel.basic_qos(prefetch_count=1)
         self.consumer_tag = consumer_tag
+        self.connected = connected
 
     def send(self, message):
         self.channel.basic_publish(exchange='',
@@ -27,6 +32,7 @@ class Pipe:
     # and puts them into the queues
     def receive_and_process(self, processor, msg_queues):
 
+        end_counter = Counter(self.connected)
         q_name = self.q_name
         c_tag = self.consumer_tag
 
@@ -37,10 +43,14 @@ class Pipe:
 
             # check for end msg, if so close
             if b == 'end':
-                for mq in msg_queues:
-                    mq.put(b)
+                #print('end')
+                if end_counter.increment():
+                    #print('end')
+                    for mq in msg_queues:
+                        mq.put(b)
 
-                ch.basic_cancel(c_tag)
+                    ch.basic_cancel(c_tag)
+
                 return
 
             # process the msg
