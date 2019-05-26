@@ -22,7 +22,7 @@ class UserAggregator:
         self.user_tweet_records.print()
 
     def save_to_file(self):
-        self.user_tweet_records.save_to_file
+        self.user_tweet_records.save_to_file()
 
 
 class TotalAggregator:
@@ -50,7 +50,7 @@ class TotalAggregator:
         self.day_tweet_records.print()
 
     def save_to_file(self):
-        self.day_tweet_records.save_to_file
+        self.day_tweet_records.save_to_file()
 
 
 class NegativeTweetValidator:

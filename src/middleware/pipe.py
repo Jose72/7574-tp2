@@ -79,3 +79,23 @@ class Pipe:
         q_declare_ok = self.channel.queue_declare(self.q_name, durable=True, passive=True)
         return q_declare_ok.method.consumer_count
 
+
+class ControlPipe:
+    def __init__(self, host_name, q_name, r_key, producer_count):
+        self.connection = pika.BlockingConnection(
+            pika.ConnectionParameters(host=host_name))
+        self.channel = self.connection.channel()
+        self.q_name = q_name
+        self.channel.queue_declare(queue=q_name, durable=True)
+        self.routing_key = r_key
+        self.channel.basic_qos(prefetch_count=1)
+        self.producer_count = producer_count
+
+    def producer_end(self):
+        self.channel.basic_publish(exchange='',
+                                   routing_key=self.routing_key,
+                                   body=json.dumps('end'),
+                                   properties=pika.BasicProperties(delivery_mode=2)
+                                   )
+
+

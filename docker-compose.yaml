@@ -1,66 +1,98 @@
 version: '3'
 services:
   filter_inbound_1:
-    build:
-      context: ./
-      dockerfile: Dockerfile.filter_inbound
+    command: python3 filter_main.py ./config/filter_inbound.json
+    image: 7574-tp2-filter-inbound
     volumes:
-        - ./:/7574-tp2
+        - ./config:/TP2/config
     environment:
-      - PYTHONUNBUFFERED=1
+        - PYTHONUNBUFFERED=1
   filter_inbound_2:
-    build:
-      context: ./
-      dockerfile: Dockerfile.filter_inbound
+    command: python3 filter_main.py ./config/filter_inbound.json
+    image: 7574-tp2-filter-inbound
     volumes:
-        - ./:/7574-tp2
+        - ./config:/TP2/config
     environment:
-      - PYTHONUNBUFFERED=1
+        - PYTHONUNBUFFERED=1
   filter_columns_1:
-    build:
-      context: ./
-      dockerfile: Dockerfile.filter_columns
+    build: .
+    command: python3 filter_main.py ./config/filter_columns.json
+    image: 7574-tp2-filter-columns
     volumes:
-        - ./:/7574-tp2
+        - ./config:/TP2/config
     environment:
-      - PYTHONUNBUFFERED=1
+        - PYTHONUNBUFFERED=1
   filter_columns_2:
-    build:
-      context: ./
-      dockerfile: Dockerfile.filter_columns
+    build: .
+    command: python3 filter_main.py ./config/filter_columns.json
+    image: 7574-tp2-filter-columns
     volumes:
-        - ./:/7574-tp2
+        - ./config:/TP2/config
     environment:
-      - PYTHONUNBUFFERED=1
+        - PYTHONUNBUFFERED=1
   text_processing_1:
-    build:
-      context: ./
-      dockerfile: Dockerfile.text_processing
+    build: .
+    command: python3 text_processing_main.py ./config/text_processing.json
+    image: 7574-tp2-text-processing
     volumes:
-        - ./:/7574-tp2
+        - ./config:/TP2/config
     environment:
-      - PYTHONUNBUFFERED=1
+        - PYTHONUNBUFFERED=1
   text_processing_2:
-    build:
-      context: ./
-      dockerfile: Dockerfile.text_processing
+    build: .
+    command: python3 text_processing_main.py ./config/text_processing.json
+    image: 7574-tp2-text-processing
     volumes:
-        - ./:/7574-tp2
+        - ./config:/TP2/config
     environment:
-      - PYTHONUNBUFFERED=1
+        - PYTHONUNBUFFERED=1
+  filter_user_1:
+    build: .
+    command: python3 filter_main.py ./config/filter_user.json
+    image: 7574-tp2-filter-columns
+    volumes:
+        - ./config:/TP2/config
+    environment:
+        - PYTHONUNBUFFERED=1
+  filter_user_2:
+    build: .
+    command: python3 filter_main.py ./config/filter_user.json
+    image: 7574-tp2-filter-columns
+    volumes:
+        - ./config:/TP2/config
+    environment:
+        - PYTHONUNBUFFERED=1
+  filter_date_1:
+    build: .
+    command: python3 filter_main.py ./config/filter_date.json
+    image: 7574-tp2-filter-columns
+    volumes:
+        - ./config:/TP2/config
+    environment:
+        - PYTHONUNBUFFERED=1
+  filter_date_2:
+    build: .
+    command: python3 filter_main.py ./config/filter_date.json
+    image: 7574-tp2-filter-columns
+    volumes:
+        - ./config:/TP2/config
+    environment:
+        - PYTHONUNBUFFERED=1
   aggregator_users:
-    build:
-      context: ./
-      dockerfile: Dockerfile.aggregator_users
+    build: .
+    command: python3 aggregator_users_main.py ./config/aggregator_users.json
+    image: 7574-tp2-aggregator-users
     volumes:
-        - ./:/7574-tp2
+        - ./config:/TP2/config
+        - ./results:/TP2/results
     environment:
-      - PYTHONUNBUFFERED=1
+        - PYTHONUNBUFFERED=1
   aggregator_total:
-    build:
-      context: ./
-      dockerfile: Dockerfile.aggregator_total
+    build: .
+    command: python3 aggregator_total_main.py ./config/aggregator_total.json
+    image: 7574-tp2-aggregator-total
     volumes:
-        - ./:/7574-tp2
+        - ./config:/TP2/config
+        - ./results:/TP2/results
     environment:
-      - PYTHONUNBUFFERED=1
+        - PYTHONUNBUFFERED=1

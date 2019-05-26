@@ -1,0 +1,10 @@
+{
+  "host_name" : "rabbitmq",
+  "in_q_name" : "post_analyze_tweets_a1",
+  "in_r_key" : "post_analyze_tweets_a1",
+  "out_q_name" : "post_analyze_tweets_a1_filtered",
+  "out_r_key" : "post_analyze_tweets_a1_filtered",
+  "fields" : ["created_at"],
+  "conditions" : [],
+  "remove" : true
+}

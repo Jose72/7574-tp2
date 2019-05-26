@@ -1,7 +1,7 @@
 FROM rabbitmq-python-base:0.0.1
 
-WORKDIR /7574-tp2
+WORKDIR /TP2
 
-#COPY . /7574-tp2
-
-CMD python3 /7574-tp2/filter_main.py filter_inbound.json
+COPY data data/
+COPY src src/
+COPY filter_main.py ./

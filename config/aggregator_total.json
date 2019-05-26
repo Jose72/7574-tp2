@@ -1,0 +1,7 @@
+{
+  "host_name_in" : "rabbitmq",
+  "in_q_name" : "post_analyze_tweets_a2_filtered",
+  "in_r_key" : "post_analyze_tweets_a2_filtered",
+  "date_field" : "created_at",
+  "aggregate_field" : "score"
+}

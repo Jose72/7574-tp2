@@ -1,0 +1,10 @@
+{
+  "host_name" : "rabbitmq",
+  "in_q_name" : "post_analyze_tweets_a2",
+  "in_r_key" : "post_analyze_tweets_a2",
+  "out_q_name" : "post_analyze_tweets_a2_filtered",
+  "out_r_key" : "post_analyze_tweets_a2_filtered",
+  "fields" : ["author_id"],
+  "conditions" : [],
+  "remove" : true
+}

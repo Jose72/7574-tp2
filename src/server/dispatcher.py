@@ -1,5 +1,5 @@
 import csv
-
+from time import sleep
 
 class Dispatcher:
 
@@ -15,8 +15,14 @@ class Dispatcher:
 
             header = next(reader)
 
+
+            counter = 0
+
             for e in reader:
                 #print(json.dumps(e))
                 pipe.send(e)
-
+                counter += 1
+                if counter == 100:
+                    sleep(0.05)
+                    counter = 0
             f.close()

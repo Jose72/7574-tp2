@@ -66,10 +66,10 @@ class UsersTweetRecords:
         return len(self.users_tweet_recs)
 
     def save_to_file(self):
-        with open("negative_users_report.txt", 'w+') as f:
+        with open("./results/negative_users_report.txt", 'w') as f:
             for utr in self.users_tweet_recs:
                 if utr.report():
-                    f.write(str(utr.get_user()))
+                    f.write(str(utr.get_user()) + '\n')
             f.close()
 
 
@@ -152,9 +152,10 @@ class DayTweetRecords:
         return len(self.day_tweet_recs)
 
     def save_to_file(self):
-        with open("daily_tweets_report.csv", 'w+') as f:
+        with open("./results/daily_tweets_report.txt", 'w') as f:
             writer = csv.DictWriter(f, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL,
                                     fieldnames=['day', 'positive_tweets', 'negative_tweets'])
             for dtr in self.day_tweet_recs:
-                f.write(dtr.get_dict())
+                #f.write(dtr.get_dict())
+                f.write(str(dtr) + '\n')
             f.close()
