@@ -2,5 +2,6 @@
   "host_name" : "rabbitmq",
   "fieldnames" : ["tweet_id", "author_id", "inbound", "created_at", "text", "response_tweet_id", "in_response_to_tweet_id"],
   "out_q_name" : "full_tweets",
-  "out_r_key" : "full_tweets"
+  "out_r_key" : "full_tweets",
+  "input_file" : "./data/twcs.csv"
 }

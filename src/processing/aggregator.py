@@ -24,6 +24,9 @@ class UserAggregator:
     def save_to_file(self):
         self.user_tweet_records.save_to_file()
 
+    def flush(self, pipe):
+        self.user_tweet_records.flush(pipe)
+
 
 class TotalAggregator:
 
@@ -51,6 +54,9 @@ class TotalAggregator:
 
     def save_to_file(self):
         self.day_tweet_records.save_to_file()
+
+    def flush(self, pipe):
+        self.day_tweet_records.flush(pipe)
 
 
 class NegativeTweetValidator:

@@ -48,7 +48,7 @@ services:
         - PYTHONUNBUFFERED=1
   filter_user_1:
     build: .
-    command: python3 filter_main.py ./config/filter_user.json 2 1
+    command: python3 filter_main.py ./config/filter_user.json 2 2
     image: 7574-tp2-filter-columns
     volumes:
         - ./config:/TP2/config
@@ -56,7 +56,7 @@ services:
         - PYTHONUNBUFFERED=1
   filter_user_2:
     build: .
-    command: python3 filter_main.py ./config/filter_user.json 2 1
+    command: python3 filter_main.py ./config/filter_user.json 2 2
     image: 7574-tp2-filter-columns
     volumes:
         - ./config:/TP2/config
@@ -64,7 +64,7 @@ services:
         - PYTHONUNBUFFERED=1
   filter_date_1:
     build: .
-    command: python3 filter_main.py ./config/filter_date.json 2 1
+    command: python3 filter_main.py ./config/filter_date.json 2 2
     image: 7574-tp2-filter-columns
     volumes:
         - ./config:/TP2/config
@@ -72,25 +72,61 @@ services:
         - PYTHONUNBUFFERED=1
   filter_date_2:
     build: .
-    command: python3 filter_main.py ./config/filter_date.json 2 1
+    command: python3 filter_main.py ./config/filter_date.json 2 2
     image: 7574-tp2-filter-columns
     volumes:
         - ./config:/TP2/config
     environment:
         - PYTHONUNBUFFERED=1
-  aggregator_users:
+  aggregator_users_1:
     build: .
-    command: python3 aggregator_users_main.py ./config/aggregator_users.json 2
+    command: python3 aggregator_users_main.py ./config/aggregator_users.json 2 1
     image: 7574-tp2-aggregator-users
     volumes:
         - ./config:/TP2/config
         - ./results:/TP2/results
     environment:
         - PYTHONUNBUFFERED=1
-  aggregator_total:
+  aggregator_users_2:
     build: .
-    command: python3 aggregator_total_main.py ./config/aggregator_total.json 2
+    command: python3 aggregator_users_main.py ./config/aggregator_users.json 2 1
+    image: 7574-tp2-aggregator-users
+    volumes:
+        - ./config:/TP2/config
+        - ./results:/TP2/results
+    environment:
+        - PYTHONUNBUFFERED=1
+  aggregator_total_1:
+    build: .
+    command: python3 aggregator_total_main.py ./config/aggregator_total.json 2 1
     image: 7574-tp2-aggregator-total
+    volumes:
+        - ./config:/TP2/config
+        - ./results:/TP2/results
+    environment:
+        - PYTHONUNBUFFERED=1
+  aggregator_total_2:
+    build: .
+    command: python3 aggregator_total_main.py ./config/aggregator_total.json 2 1
+    image: 7574-tp2-aggregator-total
+    volumes:
+        - ./config:/TP2/config
+        - ./results:/TP2/results
+    environment:
+        - PYTHONUNBUFFERED=1
+  sink_users:
+    build: .
+    command: python3 sink_users_main.py ./config/sink_users.json 2
+    image: 7574-tp2-sink-users
+    volumes:
+        - ./config:/TP2/config
+        - ./results:/TP2/results
+    environment:
+        - PYTHONUNBUFFERED=1
+  sink_total:
+    build: .
+    command: python3 sink_total_main.py ./config/sink_total.json 2
+    image: 7574-tp2-sink-total
     volumes:
         - ./config:/TP2/config
         - ./results:/TP2/results

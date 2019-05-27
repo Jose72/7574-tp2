@@ -1,0 +1,7 @@
+FROM rabbitmq-python-base:0.0.1
+
+WORKDIR /TP2
+
+COPY data data/
+COPY src src/
+COPY sink_total_main.py ./

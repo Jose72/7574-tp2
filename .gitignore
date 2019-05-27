@@ -1,6 +1,7 @@
 .idea
 results/negative_users_report.txt
 results/daily_tweets_report.txt
+data/twcs.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

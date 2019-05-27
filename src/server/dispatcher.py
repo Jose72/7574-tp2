@@ -16,7 +16,6 @@ class Dispatcher:
 
             header = next(reader)
 
-
             counter = 0
 
             for e in reader:

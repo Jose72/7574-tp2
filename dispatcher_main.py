@@ -11,7 +11,7 @@ def main():
         config_info = json.load(c_file)
         c_file.close()
         out_pipe = Pipe(config_info['host_name'], config_info['out_q_name'], config_info['out_r_key'], sys.argv[2])
-        Dispatcher.dispatch('./data/sample.csv', config_info['fieldnames'], out_pipe)
+        Dispatcher.dispatch(config_info['input_file'], config_info['fieldnames'], out_pipe)
 
         out_pipe.send_end_signal()
         out_pipe.wait_no_consumers()

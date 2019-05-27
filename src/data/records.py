@@ -1,5 +1,6 @@
 
 import csv
+from threading import Lock
 
 
 class UserTweetCounter:
@@ -31,36 +32,35 @@ class UserTweetCounter:
             result = True
         return result
 
+    def to_dict(self):
+        return {'author_id': self.user, 'negative_tweets': self.counter}
+
 
 class UsersTweetRecords:
 
     def __init__(self):
         self.users_tweet_recs = []
+        self.lock = Lock()
 
-    def increment(self, user):
+    def increment(self, user, n=1):
         found = False
         # search for the date
         for ur in self.users_tweet_recs:
             if ur.same_user(user):
                 # increment and set found to True
-                ur.increment(1)
+                ur.increment(n)
                 found = True
                 break
 
         if not found:
             ur = UserTweetCounter(user)
-            ur.increment(1)
+            ur.increment(n)
             self.users_tweet_recs.append(ur)
         return None
 
     def print(self):
         for ur in self.users_tweet_recs:
             ur.print()
-
-    def take(self):
-        if len(self.users_tweet_recs) > 0:
-            return self.users_tweet_recs.pop()
-        return None
 
     def empty(self):
         return len(self.users_tweet_recs)
@@ -72,6 +72,15 @@ class UsersTweetRecords:
                     f.write(str(utr.get_user()) + '\n')
             f.close()
 
+    def flush(self, pipe):
+        self.lock.acquire()
+        try:
+            for utr in self.users_tweet_recs:
+                pipe.send(utr.to_dict())
+                self.users_tweet_recs.remove(utr)
+        finally:
+            self.lock.release()
+
 
 class DayTweetCounter:
 
@@ -79,9 +88,6 @@ class DayTweetCounter:
         self.date = date
         self.positive_tweets = 0
         self.negative_tweets = 0
-
-    def get_dict(self):
-        return {'day': self.date, 'positive_tweets': self.positive_tweets, 'negative_tweets:': self.negative_tweets}
 
     def increment_negative(self, n):
         self.negative_tweets += n
@@ -100,53 +106,60 @@ class DayTweetCounter:
     def print(self):
         print(str(self))
 
+    def to_dict(self):
+        return {'day': self.date, 'positive_tweets': self.positive_tweets, 'negative_tweets': self.negative_tweets}
+
 
 class DayTweetRecords:
 
     def __init__(self):
         self.day_tweet_recs = []
+        self.lock = Lock()
 
     # TODO: remove duplicate code
-    def increment_positive(self, date):
+    def increment_positive(self, date, n=1):
+        self.lock.acquire()
+
         found = False
         # search for the date
         for dr in self.day_tweet_recs:
             if dr.same_date(date):
                 # increment and set found to True
-                dr.increment_positive(1)
+                dr.increment_positive(n)
                 found = True
                 break
 
         if not found:
             dr = DayTweetCounter(date)
-            dr.increment_positive(1)
+            dr.increment_positive(n)
             self.day_tweet_recs.append(dr)
+
+        self.lock.release()
         return None
 
-    def increment_negative(self, date):
+    def increment_negative(self, date, n=1):
+        self.lock.acquire()
+
         found = False
         # search for the date
         for dr in self.day_tweet_recs:
             if dr.same_date(date):
                 # increment and set found to True
-                dr.increment_negative(1)
+                dr.increment_negative(n)
                 found = True
                 break
 
         if not found:
             dr = DayTweetCounter(date)
-            dr.increment_negative(1)
+            dr.increment_negative(n)
             self.day_tweet_recs.append(dr)
+
+        self.lock.release()
         return None
 
     def print(self):
         for dr in self.day_tweet_recs:
             dr.print()
-
-    def take(self):
-        if len(self.day_tweet_recs) > 0:
-            return self.day_tweet_recs.pop()
-        return None
 
     def empty(self):
         return len(self.day_tweet_recs)
@@ -159,3 +172,12 @@ class DayTweetRecords:
                 #f.write(dtr.get_dict())
                 f.write(str(dtr) + '\n')
             f.close()
+
+    def flush(self, pipe):
+        self.lock.acquire()
+        try:
+            for dtr in self.day_tweet_recs:
+                pipe.send(dtr.to_dict())
+                self.day_tweet_recs.remove(dtr)
+        finally:
+            self.lock.release()

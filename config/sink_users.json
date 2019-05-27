@@ -1,0 +1,7 @@
+{
+  "host_name_in" : "rabbitmq",
+  "in_q_name" : "sink_tweets_a1",
+  "in_r_key" : "sink_tweets_a1",
+  "user_field" : "author_id",
+  "aggregate_field" : "negative_tweets"
+}
