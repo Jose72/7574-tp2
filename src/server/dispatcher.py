@@ -23,6 +23,6 @@ class Dispatcher:
                 pipe.send(e)
                 counter += 1
                 if counter == 100:
-                    sleep(0.05)
+                    sleep(0.2)
                     counter = 0
             f.close()
