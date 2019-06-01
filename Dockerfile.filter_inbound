@@ -1,7 +1,0 @@
-FROM rabbitmq-python-base:0.0.1
-
-WORKDIR /TP2
-
-COPY data data/
-COPY src src/
-COPY filter_main.py ./

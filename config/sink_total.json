@@ -1,8 +1,15 @@
 {
-  "host_name_in" : "rabbitmq",
-  "in_q_name" : "sink_tweets_a2",
-  "in_r_key" : "sink_tweets_a2",
-  "date_field" : "day",
-  "aggregate_field_p" : "positive_tweets",
-  "aggregate_field_n" : "negative_tweets"
+   "in_config": {
+      "host_name_in": "rabbitmq",
+      "in_q_name": "sink_tweets_a2",
+      "in_r_key": "sink_tweets_a2",
+      "producers": 2
+   },
+   "out_config": [],
+   "processor_config": {
+      "aggregate_field_n": "negative_tweets",
+      "aggregate_field_p": "positive_tweets",
+      "date_field": "day",
+      "processor_code": "sink_total"
+   }
 }

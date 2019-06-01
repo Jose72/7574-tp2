@@ -1,8 +1,13 @@
+import sys
+from os import path
+sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
+from src.processing.processor import Processor
 
 
-class Filter:
+class Filter(Processor):
 
-    def __init__(self, fields, conditions, remove):
+    def __init__(self, out_pipes, fields, conditions, remove):
+        super().__init__(out_pipes)
         self.fields = fields
         self.conditions = conditions
         self.remove = remove
@@ -24,6 +29,6 @@ class Filter:
                     del msg[f]
 
             res = msg
-
-        return res
+        # print(res)
+        self.send(res)
 

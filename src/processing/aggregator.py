@@ -1,14 +1,21 @@
 from src.data.records import UsersTweetRecords, DayTweetRecords
 from datetime import datetime
+from src.processing.processor import Processor
 
-class UserAggregator:
+import time
+from datetime import datetime
 
-    def __init__(self, u_field, aggregate_field, validator):
 
+class UserAggregator(Processor):
+
+    def __init__(self, out_pipes, u_field, aggregate_field, validator):
+
+        super().__init__(out_pipes)
         self.user_field = u_field
         self.aggregate_field = aggregate_field
         self.condition_validator = validator
         self.user_tweet_records = UsersTweetRecords()
+        self.time = datetime.now()
 
     def process(self, msg):
         ok_to_aggregate = True
@@ -17,6 +24,9 @@ class UserAggregator:
 
         if ok_to_aggregate:
             self.user_tweet_records.increment(msg[self.user_field])
+        if (self.time - datetime.now()).total_seconds() > 10:
+            self.time = datetime.now()
+            self.flush()
 
     def print(self):
         self.user_tweet_records.print()
@@ -24,30 +34,37 @@ class UserAggregator:
     def save_to_file(self):
         self.user_tweet_records.save_to_file()
 
-    def flush(self, pipe):
-        self.user_tweet_records.flush(pipe)
+    def flush(self):
+        for op in self.out_pipes:
+            self.user_tweet_records.flush(op)
+
+    def close(self):
+        self.flush()
 
 
-class TotalAggregator:
+class TotalAggregator(Processor):
 
-    def __init__(self, d_field, aggregate_field, p_validator, n_validator):
-
+    def __init__(self, out_pipes,d_field, aggregate_field):
+        super().__init__(out_pipes)
         self.date_field = d_field
         self.aggregate_field = aggregate_field
-        self.p_validator = p_validator
-        self.n_validator = n_validator
         self.day_tweet_records = DayTweetRecords()
+        self.time = datetime.now()
 
     def process(self, msg):
         datetime_object = datetime.strptime(msg[self.date_field], '%a %b %d %H:%M:%S %z %Y')
         date = datetime_object.strftime('%Y-%m-%d')
         score = msg[self.aggregate_field]
-        if self.p_validator.validate(score):
+        
+        if int(score) == 1:
             self.day_tweet_records.increment_positive(date)
         else:
-            if self.n_validator.validate(score):
+            if int(score) == -1:
                 self.day_tweet_records.increment_negative(date)
-        return None
+
+        if (self.time - datetime.now()).total_seconds() > 10:
+            self.time = datetime.now()
+            self.flush()
 
     def print(self):
         self.day_tweet_records.print()
@@ -55,8 +72,12 @@ class TotalAggregator:
     def save_to_file(self):
         self.day_tweet_records.save_to_file()
 
-    def flush(self, pipe):
-        self.day_tweet_records.flush(pipe)
+    def flush(self):
+        for op in self.out_pipes:
+            self.day_tweet_records.flush(op)
+
+    def close(self):
+        self.flush()
 
 
 class NegativeTweetValidator:
@@ -66,7 +87,6 @@ class NegativeTweetValidator:
         result = False
         if int(score) < -0.5:
             result = True
-        #print(str(score) + str(result))
         return result
 
 
@@ -76,5 +96,4 @@ class PositiveTweetValidator:
         result = False
         if int(score) > 0.5:
             result = True
-        # print(str(score) + str(result))
         return result

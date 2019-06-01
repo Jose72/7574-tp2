@@ -77,6 +77,7 @@ class UsersTweetRecords:
         try:
             for utr in self.users_tweet_recs:
                 pipe.send(utr.to_dict())
+            for utr in self.users_tweet_recs:
                 self.users_tweet_recs.remove(utr)
         finally:
             self.lock.release()
@@ -99,7 +100,7 @@ class DayTweetCounter:
         return self.date == date
 
     def __str__(self):
-        return 'day: {} - total negatives: {} - total positives: {}'.format(self.date,
+        return 'day: {} - total positives: {} - total negatives: {}'.format(self.date,
                                                                             self.positive_tweets,
                                                                             self.negative_tweets)
 
@@ -170,6 +171,7 @@ class DayTweetRecords:
                                     fieldnames=['day', 'positive_tweets', 'negative_tweets'])
             for dtr in self.day_tweet_recs:
                 #f.write(dtr.get_dict())
+                #print(str(dtr))
                 f.write(str(dtr) + '\n')
             f.close()
 
@@ -178,6 +180,8 @@ class DayTweetRecords:
         try:
             for dtr in self.day_tweet_recs:
                 pipe.send(dtr.to_dict())
+            for dtr in self.day_tweet_recs:
                 self.day_tweet_recs.remove(dtr)
+
         finally:
             self.lock.release()

@@ -1,7 +1,7 @@
 import sys
 from os import path
 sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
-
+from src.processing.processor import Processor
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 
@@ -22,9 +22,10 @@ class TextAnalyzer:
         return r
 
 
-class TextProcessor:
+class TextProcessor(Processor):
 
-    def __init__(self, field, new_field, remove):
+    def __init__(self, out_pipes, field, new_field, remove):
+        super().__init__(out_pipes)
         self.analyzer = TextAnalyzer()
         self.field = field
         self.new_field = new_field
@@ -37,6 +38,10 @@ class TextProcessor:
         if self.remove:
             del msg[self.field]
         # print(msg)
-        return msg
+
+        self.send(msg)
+
+    def close(self):
+        pass
 
 

@@ -1,10 +1,24 @@
 {
-  "host_name" : "rabbitmq",
-  "in_q_name" : "post_analyze_tweets_a2",
-  "in_r_key" : "post_analyze_tweets_a2",
-  "out_q_name" : "post_analyze_tweets_a2_filtered",
-  "out_r_key" : "post_analyze_tweets_a2_filtered",
-  "fields" : ["author_id"],
-  "conditions" : [],
-  "remove" : true
+   "in_config": {
+      "host_name_in": "rabbitmq",
+      "in_q_name": "post_analyze_tweets_a2",
+      "in_r_key": "post_analyze_tweets_a2",
+      "producers": 2
+   },
+   "out_config": [
+      {
+         "consumers": 2,
+         "host_name_out": "rabbitmq",
+         "out_q_name": "post_analyze_tweets_a2_filtered",
+         "out_r_key": "post_analyze_tweets_a2_filtered"
+      }
+   ],
+   "processor_config": {
+      "conditions": [],
+      "fields": [
+         "author_id"
+      ],
+      "processor_code": "filter",
+      "remove": true
+   }
 }

@@ -1,10 +1,26 @@
 {
-  "host_name" : "rabbitmq",
-  "in_q_name" : "inbound_tweets",
-  "in_r_key" : "inbound_tweets",
-  "out_q_name" : "pre_analyze_tweets",
-  "out_r_key" : "pre_analyze_tweets",
-  "fields" : ["tweet_id","response_tweet_id","in_response_to_tweet_id"],
-  "conditions" : [],
-  "remove" : true
+   "in_config": {
+      "host_name_in": "rabbitmq",
+      "in_q_name": "inbound_tweets",
+      "in_r_key": "inbound_tweets",
+      "producers": 2
+   },
+   "out_config": [
+      {
+         "consumers": 2,
+         "host_name_out": "rabbitmq",
+         "out_q_name": "pre_analyze_tweets",
+         "out_r_key": "pre_analyze_tweets"
+      }
+   ],
+   "processor_config": {
+      "conditions": [],
+      "fields": [
+         "tweet_id",
+         "response_tweet_id",
+         "in_response_to_tweet_id"
+      ],
+      "processor_code": "filter",
+      "remove": true
+   }
 }

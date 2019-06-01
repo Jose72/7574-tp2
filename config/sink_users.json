@@ -1,7 +1,14 @@
 {
-  "host_name_in" : "rabbitmq",
-  "in_q_name" : "sink_tweets_a1",
-  "in_r_key" : "sink_tweets_a1",
-  "user_field" : "author_id",
-  "aggregate_field" : "negative_tweets"
+   "in_config": {
+      "host_name_in": "rabbitmq",
+      "in_q_name": "sink_tweets_a1",
+      "in_r_key": "sink_tweets_a1",
+      "producers": 2
+   },
+   "out_config": [],
+   "processor_config": {
+      "aggregate_field": "negative_tweets",
+      "processor_code": "sink_users",
+      "user_field": "author_id"
+   }
 }

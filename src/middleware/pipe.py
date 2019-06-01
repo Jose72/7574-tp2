@@ -23,7 +23,7 @@ class Pipe:
     def send(self, message):
         self.channel.basic_publish(exchange='',
                                    routing_key=self.routing_key,
-                                   body=json.dumps(message),
+                                   body=json.dumps(message).encode('utf-8'),
                                    properties=pika.BasicProperties(delivery_mode=2)
                                    )
 
@@ -33,39 +33,27 @@ class Pipe:
     # receives incoming msg from rabbit queue
     # process them using a processor object
     # and puts them into the queues
-    def receive_and_process(self, processor, msg_queues):
+    def receive_and_process(self, processor):
 
         end_counter = Counter(self.connected)
         q_name = self.q_name
         c_tag = self.consumer_tag
 
         def callback(ch, method, properties, body):
-            b = json.loads(body)
-
+            b = json.loads(body.decode('utf-8'))
+            # print(b)
             ch.basic_ack(delivery_tag=method.delivery_tag)
 
             # check for end msg, if so close
             if b == 'end':
                 #print('end')
                 if end_counter.increment():
-                    #print('end')
-                    for mq in msg_queues:
-                        mq.put(b)
-
                     ch.basic_cancel(c_tag)
-
                 return
 
             # process the msg
             if processor:
-                result = processor.process(b)
-            else:
-                result = b
-
-            # put processed msg into queue
-            if result is not None:
-                for mq in msg_queues:
-                    mq.put(result)
+                processor.process(b)
 
         self.channel.basic_consume(queue=self.q_name,
                                    on_message_callback=callback,
