@@ -1,9 +1,7 @@
-from src.data.records import UsersTweetRecords, DayTweetRecords
 from datetime import datetime
+from src.data.records import UsersTweetRecords, DayTweetRecords
 from src.processing.processor import Processor
 
-import time
-from datetime import datetime
 
 
 class UserAggregator(Processor):
@@ -24,6 +22,8 @@ class UserAggregator(Processor):
 
         if ok_to_aggregate:
             self.user_tweet_records.increment(msg[self.user_field])
+
+        # if 10 sec passed between the last call, flush the data
         if (self.time - datetime.now()).total_seconds() > 10:
             self.time = datetime.now()
             self.flush()
@@ -44,7 +44,7 @@ class UserAggregator(Processor):
 
 class TotalAggregator(Processor):
 
-    def __init__(self, out_pipes,d_field, aggregate_field):
+    def __init__(self, out_pipes, d_field, aggregate_field):
         super().__init__(out_pipes)
         self.date_field = d_field
         self.aggregate_field = aggregate_field
@@ -55,13 +55,15 @@ class TotalAggregator(Processor):
         datetime_object = datetime.strptime(msg[self.date_field], '%a %b %d %H:%M:%S %z %Y')
         date = datetime_object.strftime('%Y-%m-%d')
         score = msg[self.aggregate_field]
-        
+
+        # increment
         if int(score) == 1:
             self.day_tweet_records.increment_positive(date)
         else:
             if int(score) == -1:
                 self.day_tweet_records.increment_negative(date)
 
+        # if 10 sec passed between the last call, flush the data
         if (self.time - datetime.now()).total_seconds() > 10:
             self.time = datetime.now()
             self.flush()

@@ -1,5 +1,4 @@
 from src.data.records import UsersTweetRecords, DayTweetRecords
-from datetime import datetime
 from src.processing.processor import Processor
 
 
@@ -35,13 +34,9 @@ class TotalSink(Processor):
         self.day_tweet_records = DayTweetRecords()
 
     def process(self, msg):
-        
         date = msg[self.date_field]
-
         self.day_tweet_records.increment_positive(date, int(msg[self.aggregate_field_p]))
-
         self.day_tweet_records.increment_negative(date, int(msg[self.aggregate_field_n]))
-
         return None
 
     def print(self):

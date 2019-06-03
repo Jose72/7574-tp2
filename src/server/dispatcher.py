@@ -2,6 +2,7 @@ import csv
 import json
 from time import sleep
 
+
 class Dispatcher:
 
     @staticmethod

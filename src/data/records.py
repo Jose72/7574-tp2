@@ -40,7 +40,6 @@ class UsersTweetRecords:
 
     def __init__(self):
         self.users_tweet_recs = []
-        self.lock = Lock()
 
     def increment(self, user, n=1):
         found = False
@@ -73,14 +72,10 @@ class UsersTweetRecords:
             f.close()
 
     def flush(self, pipe):
-        self.lock.acquire()
-        try:
-            for utr in self.users_tweet_recs:
-                pipe.send(utr.to_dict())
-            for utr in self.users_tweet_recs:
-                self.users_tweet_recs.remove(utr)
-        finally:
-            self.lock.release()
+        for utr in self.users_tweet_recs:
+            pipe.send(utr.to_dict())
+        for utr in self.users_tweet_recs:
+            self.users_tweet_recs.remove(utr)
 
 
 class DayTweetCounter:
@@ -115,11 +110,9 @@ class DayTweetRecords:
 
     def __init__(self):
         self.day_tweet_recs = []
-        self.lock = Lock()
 
     # TODO: remove duplicate code
     def increment_positive(self, date, n=1):
-        self.lock.acquire()
 
         found = False
         # search for the date
@@ -135,11 +128,9 @@ class DayTweetRecords:
             dr.increment_positive(n)
             self.day_tweet_recs.append(dr)
 
-        self.lock.release()
         return None
 
     def increment_negative(self, date, n=1):
-        self.lock.acquire()
 
         found = False
         # search for the date
@@ -155,7 +146,6 @@ class DayTweetRecords:
             dr.increment_negative(n)
             self.day_tweet_recs.append(dr)
 
-        self.lock.release()
         return None
 
     def print(self):
@@ -176,12 +166,8 @@ class DayTweetRecords:
             f.close()
 
     def flush(self, pipe):
-        self.lock.acquire()
-        try:
-            for dtr in self.day_tweet_recs:
-                pipe.send(dtr.to_dict())
-            for dtr in self.day_tweet_recs:
-                self.day_tweet_recs.remove(dtr)
+        for dtr in self.day_tweet_recs:
+            pipe.send(dtr.to_dict())
+        for dtr in self.day_tweet_recs:
+            self.day_tweet_recs.remove(dtr)
 
-        finally:
-            self.lock.release()

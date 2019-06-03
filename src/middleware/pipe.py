@@ -7,6 +7,7 @@ sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
 
 from src.utils.counter import Counter
 
+
 class Pipe:
 
     def __init__(self, host_name, q_name, r_key, connected, consumer_tag=None):
@@ -32,7 +33,6 @@ class Pipe:
 
     # receives incoming msg from rabbit queue
     # process them using a processor object
-    # and puts them into the queues
     def receive_and_process(self, processor):
 
         end_counter = Counter(self.connected)

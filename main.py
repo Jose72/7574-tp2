@@ -4,7 +4,7 @@ import uuid
 import sys
 #sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
 
-from src.middleware.pipe_2 import TPipe
+from src.middleware.tpipe import TPipe
 
 
 def main():

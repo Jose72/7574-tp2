@@ -5,23 +5,6 @@ from src.processing.processor import Processor
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 
-class TextAnalyzer:
-
-    def __init__(self):
-        self.sentiment_analyzer = SentimentIntensityAnalyzer()
-
-    # return 1 if its a positive tweet
-    # -1 if negative, 0 otherwise
-    def analyze(self, text):
-        score = self.sentiment_analyzer.polarity_scores(text)['compound']
-        r = 0
-        if score < -0.5:
-            r = -1
-        if score > 0.5:
-            r = 1
-        return r
-
-
 class TextProcessor(Processor):
 
     def __init__(self, out_pipes, field, new_field, remove):
@@ -41,7 +24,19 @@ class TextProcessor(Processor):
 
         self.send(msg)
 
-    def close(self):
-        pass
 
+class TextAnalyzer:
 
+    def __init__(self):
+        self.sentiment_analyzer = SentimentIntensityAnalyzer()
+
+    # return 1 if its a positive tweet
+    # -1 if negative, 0 otherwise
+    def analyze(self, text):
+        score = self.sentiment_analyzer.polarity_scores(text)['compound']
+        r = 0
+        if score < -0.5:
+            r = -1
+        if score > 0.5:
+            r = 1
+        return r

@@ -8,6 +8,7 @@ from src.processing.aggregator import UserAggregator, TotalAggregator, NegativeT
 from src.processing.filter import Filter
 from src.processing.analyzer import TextProcessor
 from src.processing.sink import TotalSink, UserSink
+from src.processing.processor import Processor
 
 
 class ProcessorFactory:
@@ -29,3 +30,4 @@ class ProcessorFactory:
         elif p_code == "sink_total":
             return TotalSink(out_pipes, config_info['date_field'], config_info['aggregate_field_p'],
                              config_info['aggregate_field_n'])
+        return Processor(out_pipes)
