@@ -65,10 +65,16 @@ class UsersTweetRecords:
         return len(self.users_tweet_recs)
 
     def save_to_file(self):
-        with open("./results/negative_users_report.txt", 'w') as f:
+        with open("./results/negative_users_report.csv", 'w') as f:
+            writer = csv.DictWriter(f, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL,
+                                    fieldnames=['author_id', 'negative_tweets'])
+
+            writer.writeheader()
+
             for utr in self.users_tweet_recs:
                 if utr.report():
-                    f.write(str(utr.get_user()) + '\n')
+                    writer.writerow(utr.to_dict())
+
             f.close()
 
     def flush(self, pipe):
@@ -156,13 +162,15 @@ class DayTweetRecords:
         return len(self.day_tweet_recs)
 
     def save_to_file(self):
-        with open("./results/daily_tweets_report.txt", 'w') as f:
+        with open("./results/daily_tweets_report.csv", 'w') as f:
             writer = csv.DictWriter(f, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL,
                                     fieldnames=['day', 'positive_tweets', 'negative_tweets'])
+
+            writer.writeheader()
+
             for dtr in self.day_tweet_recs:
-                #f.write(dtr.get_dict())
-                #print(str(dtr))
-                f.write(str(dtr) + '\n')
+                #f.write(str(dtr) + '\n')
+                writer.writerow(dtr.to_dict())
             f.close()
 
     def flush(self, pipe):

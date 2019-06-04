@@ -1,3 +1,0 @@
-day: 2017-10-10 - total positives: 2 - total negatives: 1
-day: 2017-10-11 - total positives: 28 - total negatives: 7
-day: 2017-10-12 - total positives: 2 - total negatives: 0
