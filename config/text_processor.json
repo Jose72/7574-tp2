@@ -9,14 +9,14 @@
       {
          "consumers": 2,
          "host_name_out": "rabbitmq",
-         "out_q_name": "post_analyze_tweets_a1",
-         "out_r_key": "post_analyze_tweets_a1"
+         "in_q_name": "post_analyze_tweets_a1",
+         "in_r_key": "post_analyze_tweets_a1"
       },
       {
          "consumers": 2,
          "host_name_out": "rabbitmq",
-         "out_q_name": "post_analyze_tweets_a2",
-         "out_r_key": "post_analyze_tweets_a2"
+         "in_q_name": "post_analyze_tweets_a2",
+         "in_r_key": "post_analyze_tweets_a2"
       }
    ],
    "processor_config": {

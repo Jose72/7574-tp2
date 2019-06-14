@@ -1,10 +1,21 @@
 {
-  "host_name_in" : "rabbitmq",
-  "in_q_name" : "post_analyze_tweets_a1_filtered",
-  "in_r_key" : "post_analyze_tweets_a1_filtered",
-  "host_name_out" : "rabbitmq",
-  "out_q_name" : "sink_tweets_a1",
-  "out_r_key" : "sink_tweets_a1",
-  "user_field" : "author_id",
-  "aggregate_field" : "score"
+   "in_config": {
+      "host_name_in": "rabbitmq",
+      "in_q_name": "post_analyze_tweets_a1_filtered",
+      "in_r_key": "post_analyze_tweets_a1_filtered",
+      "producers": 2
+   },
+   "out_config": [
+      {
+         "consumers": 1,
+         "host_name_out": "rabbitmq",
+         "out_q_name": "sink_tweets_a1",
+         "out_r_key": "sink_tweets_a1"
+      }
+   ],
+   "processor_config": {
+      "aggregate_field": "score",
+      "processor_code": "aggregator_users",
+      "user_field": "author_id"
+   }
 }

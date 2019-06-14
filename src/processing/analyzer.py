@@ -1,8 +1,28 @@
 import sys
 from os import path
 sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
-
+from src.processing.processor import Processor
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
+
+
+class TextProcessor(Processor):
+
+    def __init__(self, out_pipes, field, new_field, remove):
+        super().__init__(out_pipes)
+        self.analyzer = TextAnalyzer()
+        self.field = field
+        self.new_field = new_field
+        self.remove = remove
+
+    def process(self, msg):
+        text = msg[self.field]
+        score = self.analyzer.analyze(text)
+        msg.update({self.new_field: score})
+        if self.remove:
+            del msg[self.field]
+        # print(msg)
+
+        self.send(msg)
 
 
 class TextAnalyzer:
@@ -20,23 +40,3 @@ class TextAnalyzer:
         if score > 0.5:
             r = 1
         return r
-
-
-class TextProcessor:
-
-    def __init__(self, field, new_field, remove):
-        self.analyzer = TextAnalyzer()
-        self.field = field
-        self.new_field = new_field
-        self.remove = remove
-
-    def process(self, msg):
-        text = msg[self.field]
-        score = self.analyzer.analyze(text)
-        msg.update({self.new_field: score})
-        if self.remove:
-            del msg[self.field]
-        # print(msg)
-        return msg
-
-

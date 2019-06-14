@@ -1,4 +1,5 @@
 import sys
+import json
 
 DISPATCHER = "\
   dispatcher:\n\
@@ -12,8 +13,8 @@ DISPATCHER = "\
 
 FILTER_INBOUND = "\
   filter_inbound_{}:\n\
-    command: python3 filter_main.py ./config/filter_inbound.json {} {}\n\
-    image: 7574-tp2-filter-inbound\n\
+    command: python3 main.py ./config/filter_inbound.json {} {}\n\
+    image: 7574-tp2\n\
     volumes:\n\
         - ./config:/TP2/config\n\
     environment:\n\
@@ -22,8 +23,8 @@ FILTER_INBOUND = "\
 FILTER_COLUMNS = "\
   filter_columns_{}:\n\
     build: .\n\
-    command: python3 filter_main.py ./config/filter_columns.json {} {}\n\
-    image: 7574-tp2-filter-columns\n\
+    command: python3 main.py ./config/filter_columns.json {} {}\n\
+    image: 7574-tp2\n\
     volumes:\n\
         - ./config:/TP2/config\n\
     environment:\n\
@@ -32,8 +33,8 @@ FILTER_COLUMNS = "\
 TEXT_PROCESSING = "\
   text_processing_{}:\n\
     build: .\n\
-    command: python3 text_processing_main.py ./config/text_processing.json {} {} {}\n\
-    image: 7574-tp2-text-processing\n\
+    command: python3 main.py ./config/text_processing.json {} {} {}\n\
+    image: 7574-tp2\n\
     volumes:\n\
         - ./config:/TP2/config\n\
     environment:\n\
@@ -42,8 +43,8 @@ TEXT_PROCESSING = "\
 FILTER_USER = "\
   filter_user_{}:\n\
     build: .\n\
-    command: python3 filter_main.py ./config/filter_user.json {} {}\n\
-    image: 7574-tp2-filter-columns\n\
+    command: python3 main.py ./config/filter_user.json {} {}\n\
+    image: 7574-tp2\n\
     volumes:\n\
         - ./config:/TP2/config\n\
     environment:\n\
@@ -52,8 +53,8 @@ FILTER_USER = "\
 FILTER_DATE = "\
   filter_date_{}:\n\
     build: .\n\
-    command: python3 filter_main.py ./config/filter_date.json {} {}\n\
-    image: 7574-tp2-filter-columns\n\
+    command: python3 main.py ./config/filter_date.json {} {}\n\
+    image: 7574-tp2\n\
     volumes:\n\
         - ./config:/TP2/config\n\
     environment:\n\
@@ -62,8 +63,8 @@ FILTER_DATE = "\
 AGGREGATOR_USERS = "\
   aggregator_users_{}:\n\
     build: .\n\
-    command: python3 aggregator_users_main.py ./config/aggregator_users.json {} {}\n\
-    image: 7574-tp2-aggregator-users\n\
+    command: python3 main.py ./config/aggregator_users.json {} {}\n\
+    image: 7574-tp2\n\
     volumes:\n\
         - ./config:/TP2/config\n\
         - ./results:/TP2/results\n\
@@ -73,8 +74,8 @@ AGGREGATOR_USERS = "\
 AGGREGATOR_TOTAL = "\
   aggregator_total_{}:\n\
     build: .\n\
-    command: python3 aggregator_total_main.py ./config/aggregator_total.json {} {}\n\
-    image: 7574-tp2-aggregator-total\n\
+    command: python3 main.py ./config/aggregator_total.json {} {}\n\
+    image: 7574-tp2\n\
     volumes:\n\
         - ./config:/TP2/config\n\
         - ./results:/TP2/results\n\
@@ -84,8 +85,8 @@ AGGREGATOR_TOTAL = "\
 SINK_USERS = "\
   sink_users:\n\
     build: .\n\
-    command: python3 sink_users_main.py ./config/sink_users.json {}\n\
-    image: 7574-tp2-sink-users\n\
+    command: python3 main.py ./config/sink_users.json {}\n\
+    image: 7574-tp2\n\
     volumes:\n\
         - ./config:/TP2/config\n\
         - ./results:/TP2/results\n\
@@ -95,8 +96,8 @@ SINK_USERS = "\
 SINK_TOTAL = "\
   sink_total:\n\
     build: .\n\
-    command: python3 sink_total_main.py ./config/sink_total.json {}\n\
-    image: 7574-tp2-sink-total\n\
+    command: python3 main.py ./config/sink_total.json {}\n\
+    image: 7574-tp2\n\
     volumes:\n\
         - ./config:/TP2/config\n\
         - ./results:/TP2/results\n\

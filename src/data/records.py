@@ -40,7 +40,6 @@ class UsersTweetRecords:
 
     def __init__(self):
         self.users_tweet_recs = []
-        self.lock = Lock()
 
     def increment(self, user, n=1):
         found = False
@@ -66,20 +65,23 @@ class UsersTweetRecords:
         return len(self.users_tweet_recs)
 
     def save_to_file(self):
-        with open("./results/negative_users_report.txt", 'w') as f:
+        with open("./results/negative_users_report.csv", 'w') as f:
+            writer = csv.DictWriter(f, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL,
+                                    fieldnames=['author_id', 'negative_tweets'])
+
+            writer.writeheader()
+
             for utr in self.users_tweet_recs:
                 if utr.report():
-                    f.write(str(utr.get_user()) + '\n')
+                    writer.writerow(utr.to_dict())
+
             f.close()
 
     def flush(self, pipe):
-        self.lock.acquire()
-        try:
-            for utr in self.users_tweet_recs:
-                pipe.send(utr.to_dict())
-                self.users_tweet_recs.remove(utr)
-        finally:
-            self.lock.release()
+        for utr in self.users_tweet_recs:
+            pipe.send(utr.to_dict())
+        for utr in self.users_tweet_recs:
+            self.users_tweet_recs.remove(utr)
 
 
 class DayTweetCounter:
@@ -99,7 +101,7 @@ class DayTweetCounter:
         return self.date == date
 
     def __str__(self):
-        return 'day: {} - total negatives: {} - total positives: {}'.format(self.date,
+        return 'day: {} - total positives: {} - total negatives: {}'.format(self.date,
                                                                             self.positive_tweets,
                                                                             self.negative_tweets)
 
@@ -114,11 +116,9 @@ class DayTweetRecords:
 
     def __init__(self):
         self.day_tweet_recs = []
-        self.lock = Lock()
 
     # TODO: remove duplicate code
     def increment_positive(self, date, n=1):
-        self.lock.acquire()
 
         found = False
         # search for the date
@@ -134,11 +134,9 @@ class DayTweetRecords:
             dr.increment_positive(n)
             self.day_tweet_recs.append(dr)
 
-        self.lock.release()
         return None
 
     def increment_negative(self, date, n=1):
-        self.lock.acquire()
 
         found = False
         # search for the date
@@ -154,7 +152,6 @@ class DayTweetRecords:
             dr.increment_negative(n)
             self.day_tweet_recs.append(dr)
 
-        self.lock.release()
         return None
 
     def print(self):
@@ -165,19 +162,20 @@ class DayTweetRecords:
         return len(self.day_tweet_recs)
 
     def save_to_file(self):
-        with open("./results/daily_tweets_report.txt", 'w') as f:
+        with open("./results/daily_tweets_report.csv", 'w') as f:
             writer = csv.DictWriter(f, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL,
                                     fieldnames=['day', 'positive_tweets', 'negative_tweets'])
+
+            writer.writeheader()
+
             for dtr in self.day_tweet_recs:
-                #f.write(dtr.get_dict())
-                f.write(str(dtr) + '\n')
+                #f.write(str(dtr) + '\n')
+                writer.writerow(dtr.to_dict())
             f.close()
 
     def flush(self, pipe):
-        self.lock.acquire()
-        try:
-            for dtr in self.day_tweet_recs:
-                pipe.send(dtr.to_dict())
-                self.day_tweet_recs.remove(dtr)
-        finally:
-            self.lock.release()
+        for dtr in self.day_tweet_recs:
+            pipe.send(dtr.to_dict())
+        for dtr in self.day_tweet_recs:
+            self.day_tweet_recs.remove(dtr)
+

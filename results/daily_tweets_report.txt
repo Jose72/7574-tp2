@@ -1,3 +1,0 @@
-day: ('2017-10-11',) - total negatives: 16 - total positives: 1
-day: ('2017-10-12',) - total negatives: 2 - total positives: 0
-day: ('2017-10-10',) - total negatives: 1 - total positives: 0
