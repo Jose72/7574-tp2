@@ -5,6 +5,7 @@ import sys
 #sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
 
 from src.middleware.tpipe import TPipe
+from src.processing.factory import ProcessorFactory
 
 
 def main():
@@ -14,7 +15,9 @@ def main():
         config_info = json.load(c_file)
         c_file.close()
 
-        p = TPipe(config_info["in_config"], config_info["out_config"], config_info["processor_config"], consumer_tag)
+        processor = ProcessorFactory.create(config_info["processor_config"])
+
+        p = TPipe(config_info["in_config"], config_info["out_config"], processor, consumer_tag)
         p.run()
 
 

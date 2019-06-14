@@ -11,7 +11,7 @@ from src.processing.factory import ProcessorFactory
 
 class TPipe:
 
-    def __init__(self, in_config, out_configs, processor_config, consumer_tag):
+    def __init__(self, in_config, out_configs, processor, consumer_tag):
 
         # create the in pipe
         self.in_pipe = Pipe(in_config['host_name_in'], in_config['in_q_name'],
@@ -24,14 +24,23 @@ class TPipe:
                 Pipe(oc['host_name_out'], oc['out_q_name'], oc['out_r_key'], oc["consumers"])
             )
 
-        # create the processor
-        self.processor = ProcessorFactory.create(processor_config, self.out_pipes)
+        # processor
+        self.processor = processor
+
+    def send(self, data):
+        for d in data:
+            for op in self.out_pipes:
+                op.send(d)
 
     def run(self):
 
         # receive and process, close the in pipe when done
-        self.in_pipe.receive_and_process(self.processor)
+        self.in_pipe.receive_and_process(self.processor, self.out_pipes)
         self.in_pipe.close()
+
+        # send data left
+        r_data = self.processor.flush()
+        self.send(r_data)
 
         # finish if processor has something else to do
         self.processor.close()

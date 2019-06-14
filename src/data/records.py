@@ -77,11 +77,13 @@ class UsersTweetRecords:
 
             f.close()
 
-    def flush(self, pipe):
+    def flush(self):
+        data = []
         for utr in self.users_tweet_recs:
-            pipe.send(utr.to_dict())
+            data.append(utr.to_dict())
         for utr in self.users_tweet_recs:
             self.users_tweet_recs.remove(utr)
+        return data
 
 
 class DayTweetCounter:
@@ -173,9 +175,11 @@ class DayTweetRecords:
                 writer.writerow(dtr.to_dict())
             f.close()
 
-    def flush(self, pipe):
+    def flush(self):
+        data = []
         for dtr in self.day_tweet_recs:
-            pipe.send(dtr.to_dict())
+            data.append(dtr.to_dict())
         for dtr in self.day_tweet_recs:
             self.day_tweet_recs.remove(dtr)
+        return data
 

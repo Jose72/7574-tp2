@@ -7,8 +7,8 @@ from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 class TextProcessor(Processor):
 
-    def __init__(self, out_pipes, field, new_field, remove):
-        super().__init__(out_pipes)
+    def __init__(self, field, new_field, remove):
+        super().__init__()
         self.analyzer = TextAnalyzer()
         self.field = field
         self.new_field = new_field
@@ -22,7 +22,7 @@ class TextProcessor(Processor):
             del msg[self.field]
         # print(msg)
 
-        self.send(msg)
+        return [msg]
 
 
 class TextAnalyzer:

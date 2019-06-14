@@ -33,7 +33,7 @@ class Pipe:
 
     # receives incoming msg from rabbit queue
     # process them using a processor object
-    def receive_and_process(self, processor):
+    def receive_and_process(self, processor, out_queues):
 
         end_counter = Counter(self.connected)
         q_name = self.q_name
@@ -52,8 +52,15 @@ class Pipe:
                 return
 
             # process the msg
+            # must receive an array
+            res = []
             if processor:
-                processor.process(b)
+                res = processor.process(b)
+
+            # send results
+            for d in res:
+                for oq in out_queues:
+                    oq.put(d)
 
         self.channel.basic_consume(queue=self.q_name,
                                    on_message_callback=callback,

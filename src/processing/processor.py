@@ -2,16 +2,13 @@
 
 class Processor:
 
-    def __init__(self, out_pipes):
-        self.out_pipes = out_pipes
-
+    # returns an array of elements
     def process(self, msg):
-        pass
+        return []
 
-    def send(self, msg):
-        if msg is not None:
-            for p in self.out_pipes:
-                p.send(msg)
+    # returns an array of elements
+    def flush(self):
+        return []
 
     def close(self):
         pass

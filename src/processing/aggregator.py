@@ -6,9 +6,9 @@ from src.processing.processor import Processor
 
 class UserAggregator(Processor):
 
-    def __init__(self, out_pipes, u_field, aggregate_field, validator):
+    def __init__(self, u_field, aggregate_field, validator):
 
-        super().__init__(out_pipes)
+        super().__init__()
         self.user_field = u_field
         self.aggregate_field = aggregate_field
         self.condition_validator = validator
@@ -26,7 +26,9 @@ class UserAggregator(Processor):
         # if 10 sec passed between the last call, flush the data
         if (self.time - datetime.now()).total_seconds() > 10:
             self.time = datetime.now()
-            self.flush()
+            return self.flush()
+
+        return []
 
     def print(self):
         self.user_tweet_records.print()
@@ -35,17 +37,12 @@ class UserAggregator(Processor):
         self.user_tweet_records.save_to_file()
 
     def flush(self):
-        for op in self.out_pipes:
-            self.user_tweet_records.flush(op)
-
-    def close(self):
-        self.flush()
-
+        return self.user_tweet_records.flush()
 
 class TotalAggregator(Processor):
 
-    def __init__(self, out_pipes, d_field, aggregate_field):
-        super().__init__(out_pipes)
+    def __init__(self, d_field, aggregate_field):
+        super().__init__()
         self.date_field = d_field
         self.aggregate_field = aggregate_field
         self.day_tweet_records = DayTweetRecords()
@@ -66,7 +63,9 @@ class TotalAggregator(Processor):
         # if 10 sec passed between the last call, flush the data
         if (self.time - datetime.now()).total_seconds() > 10:
             self.time = datetime.now()
-            self.flush()
+            return self.flush()
+
+        return []
 
     def print(self):
         self.day_tweet_records.print()
@@ -75,11 +74,7 @@ class TotalAggregator(Processor):
         self.day_tweet_records.save_to_file()
 
     def flush(self):
-        for op in self.out_pipes:
-            self.day_tweet_records.flush(op)
-
-    def close(self):
-        self.flush()
+        return self.day_tweet_records.flush()
 
 
 class NegativeTweetValidator:

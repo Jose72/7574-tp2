@@ -4,14 +4,15 @@ from src.processing.processor import Processor
 
 class UserSink(Processor):
 
-    def __init__(self, out_pipes, u_field, aggregate_field):
-        super().__init__(out_pipes)
+    def __init__(self, u_field, aggregate_field):
+        super().__init__()
         self.user_field = u_field
         self.aggregate_field = aggregate_field
         self.user_tweet_records = UsersTweetRecords()
 
     def process(self, msg):
         self.user_tweet_records.increment(msg[self.user_field], int(msg[self.aggregate_field]))
+        return []
 
     def print(self):
         self.user_tweet_records.print()
@@ -26,8 +27,8 @@ class UserSink(Processor):
 
 class TotalSink(Processor):
 
-    def __init__(self, out_pipes, d_field, aggregate_field_p, aggregate_field_n):
-        super().__init__(out_pipes)
+    def __init__(self, d_field, aggregate_field_p, aggregate_field_n):
+        super().__init__()
         self.date_field = d_field
         self.aggregate_field_p = aggregate_field_p
         self.aggregate_field_n = aggregate_field_n
@@ -37,7 +38,7 @@ class TotalSink(Processor):
         date = msg[self.date_field]
         self.day_tweet_records.increment_positive(date, int(msg[self.aggregate_field_p]))
         self.day_tweet_records.increment_negative(date, int(msg[self.aggregate_field_n]))
-        return None
+        return []
 
     def print(self):
         self.day_tweet_records.print()
